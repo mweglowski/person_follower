@@ -4,7 +4,6 @@ import cv2
 import numpy as np
 
 import keyboard_control
-import image_processing
 import detection
 
 
@@ -32,6 +31,12 @@ def main():
         # Visualization of person detection
         box_coords = detection.visualize_detections(image_numpy)
         print(box_coords)
+        
+        if box_coords:
+            area = abs(box_coords[2] - box_coords[0]) * abs(box_coords[1] - box_coords[3])
+            print(area)
+            center_point = ((box_coords[1] + box_coords[3]) // 2, (box_coords[0] + box_coords[2]) // 2)
+            print(center_point)
 
         # Controlling drone
         # control_values = keyboard_control.control_input(drone)
