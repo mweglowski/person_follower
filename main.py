@@ -18,30 +18,30 @@ def initialize_drone():
 
 def main():
     keyboard_control.init()
-    drone = initialize_drone()
-    drone.streamon()
+    # drone = initialize_drone()
+    # drone.streamon()
+    
+    cap = cv2.VideoCapture(0)
 
     while True:
-        image = drone.get_frame_read().frame
-        image = cv2.resize(image, (480, 320))
+        _, image = cap.read()
+        # image = drone.get_frame_read().frame
+        image = cv2.resize(image, (600, 400))
 
-        # np.array([...])
         image_numpy = np.array(image)
-        # tf.Tensor([...])
-        input_tensor = image_processing.convert_to_tensor(image_numpy)
-        
         # Visualization of person detection
-        detection.visualize_detections(image, input_tensor)
+        box_coords = detection.visualize_detections(image_numpy)
+        print(box_coords)
 
         # Controlling drone
-        control_values = keyboard_control.control_input(drone)
-        drone.send_rc_control(control_values[0], control_values[1], control_values[2], control_values[3])
+        # control_values = keyboard_control.control_input(drone)
+        # drone.send_rc_control(control_values[0], control_values[1], control_values[2], control_values[3])
         time.sleep(0.05)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    drone.streamoff()
+    # drone.streamoff()
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
